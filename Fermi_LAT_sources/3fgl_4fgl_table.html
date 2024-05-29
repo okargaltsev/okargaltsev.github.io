@@ -1,0 +1,305 @@
+<!doctype html>
+<html>
+
+<head>
+  <meta charset="UTF-8">
+  <title>Untitled Document</title>
+  <style>
+    table,
+    td,
+    th {
+      border: 1px solid black;
+      color: black;
+      border-collapse: collapse;
+    }
+  </style>
+</head>
+
+<body>
+  <h1>Identifying Fermi LAT sources with X-ray and multiwavelength data.</h1>
+  <h2>Introduction</h2>
+  <p>Growing number of Fermi LAT sources, improving coverage of Galactic plane with Chandra (CXO) and XMM-Newton X-ray
+    observatories, and deeper high-resolution optical, NIR, and radio surveys enable multiwavelength classification of
+    unidentified LAT sources. These are typically very labor-intensive because of the large number of sources and large
+    number of multiwavelength parameters (features) characterizing them. Therefore, Machine-Learning (ML) methods can be
+    of a great help.</p>
+  <h2>Sample definition</h2>
+  <li> We have been analyzing unidentified 3FGL source located within &lt10 degrees from the Galactic plane. However,
+    since with the recent release of 4FGL positions and significance of Galactic 3FGL source have changed substantially
+    (see below). Therefore, we focus here only on those LAT sources whose 3FGL and 4FLG positions fall within 8’ (for
+    ACIS-I) and 4’ (for ACIS-S) from the CXO pointing (which in many cases was not even intended to study the LAT
+    source). </li>
+  <li>4FGL catalog has several “kinds” of “unidentified” sources. Some sources are “associated” with known sources but
+    the associations are uncertain. Below we only consider sources that are listed as in 4FGL catalog without any class
+    or with class “unknown”. Note that some of these sources turn out to have credible associations that are not listed
+    in the released 4FGL catalog (see an example below). </li>
+  <h2>3FGL vs. 4FGL </h2>
+  <li>Galactic Fermi LAT sources have a known tendency to disappear or move around in new releases. </li>
+  <li>Within |b|&lt10 deg, only about 50% of unidentified 3FGL sources overlaps (within the 95% confidence positional
+    uncertainties) with the 4FGL sources. </li>
+  <img src="slides/Picture1.png" alt="" width="1000" />
+  <p>Fig 1. A region of Galactic plane (the background image if from the H.E.S.S. Galactic Plane survey) with 2FGL
+    (magenta), 3FGL (yellow), 8-yr prelim (red), 4FGL (blue) 95% confidence ellipses shown.</p>
+  <img src="slides/Picture2.png" width="800" alt="" />
+  <p>Figure 2. The 3 upper panels show the histograms for unIDed Galactic (|b|&lt10 deg). Panels a and b show the
+    histograms  of semimajor uncertainty ellipse for 3FGL and 4FGL sources. Panel c shows the distribution of offsets
+    between the unIDed 3FGL and 4FGL sources whose positions are &lt10' from each other. The three bottom panels show
+    the significance of the 3FGL LAT source (having a match in 4FGL within r&lt10'; panel d) and the size of the
+    uncertainty ellipse (in 3FGL and 4FLG, panels e and f) as a function of separation between the 3FGL source and its
+    best match in 4FGL. One can see that the offset between the 3FGL and 4FGL source does not depend noticeably on the
+    3FGL source significance and that the correlation between the source uncertainty ellipse size and the separation
+    improves if the 4FGL positional uncertainty is used (i.e. localized 4FGL sources tend to be closer to their 3FGL
+    predecessors).</p>
+  <h2>Investigated objects</h2>
+  <table>
+    <tr>
+      <td>CXO Target Name</td>
+      <td>ACIS Texp, ks</td>
+      <td>3FGL Name</td>
+      <td>4FGL Name</td>
+      <td>3FGL sign. </td>
+      <td>4FGL sign.</td>
+      <td>3FGL spec. curv. </td>
+      <td>4FGL spec. curv. </td>
+      <td>3FGL Spec</td>
+      <td>4FGL Spec</td>
+      <td>4FGL En Flux</td>
+      <td>GLON</td>
+      <td>GLAT</td>
+    </tr>
+    <tr>
+      <td><a href="slides/FGL_slides (dragged) 9.pdf">2FGL J0212.1+5318</a></td>
+      <td>30.</td>
+      <td>3FGL J0212.1+5320</td>
+      <td>4FGL J0212.1+5321</td>
+      <td>25.068447</td>
+      <td>43.544834</td>
+      <td>6.310335</td>
+      <td>11.442324</td>
+      <td>LogParabola</td>
+      <td>LogParabola</td>
+      <td>1.6221026e-11</td>
+      <td>134.92581</td>
+      <td>-7.630409</td>
+    </tr>
+    <tr>
+      <td>2FGL J0934.0-6231</td>
+      <td>43.</td>
+      <td>3FGL J0933.9-6232</td>
+      <td>4FGL J0933.8-6232</td>
+      <td>22.06935</td>
+      <td>38.367077</td>
+      <td>8.8180485</td>
+      <td>14.809568</td>
+      <td>LogParabola</td>
+      <td>LogParabola</td>
+      <td>1.2592141e-11</td>
+      <td>282.24362</td>
+      <td>-7.9074183</td>
+    </tr>
+    <tr>
+      <td>3FGL J1306.4 -6043</td>
+      <td>10.</td>
+      <td>3FGL J1306.4 -6043</td>
+      <td>4FGL J1306.3-6043</td>
+      <td>25.448307</td>
+      <td>37.24788</td>
+      <td>7.1673965</td>
+      <td>11.656551</td>
+      <td>LogParabola</td>
+      <td>LogParabola</td>
+      <td>2.4102173e-11</td>
+      <td>304.75537</td>
+      <td>2.0990448</td>
+    </tr>
+    <tr>
+      <td><a href="slides/FGL_slides (dragged) 13.pdf">2FGL J0340.5+5307</a></td>
+      <td>10.</td>
+      <td>3FGL J0340.4+5302</td>
+      <td>4FGL J0340.4+5302</td>
+      <td>22.307777</td>
+      <td>28.90842</td>
+      <td>5.9493866</td>
+      <td>14.394521</td>
+      <td>LogParabola</td>
+      <td>LogParabola</td>
+      <td>5.2354985e-11</td>
+      <td>146.7922</td>
+      <td>-1.821867</td>
+    </tr>
+    <tr>
+      <td><a href="slides/FGL_slides (dragged) 11.pdf">G311.5-0.3</a></td>
+      <td>13.</td>
+      <td>3FGL J1405.4-6119</td>
+      <td>4FGL J1405.1-6119</td>
+      <td>24.823463</td>
+      <td>22.05864</td>
+      <td>6.9925556</td>
+      <td>10.0069275</td>
+      <td>LogParabola</td>
+      <td>LogParabola</td>
+      <td>8.916591e-11</td>
+      <td>311.6595</td>
+      <td>0.2836073</td>
+    </tr>
+    <tr>
+      <td>Carina Clusters Ptg 5</td>
+      <td>57.</td>
+      <td>3FGL J1047.3-6005</td>
+      <td>4FGL J1046.7-6010</td>
+      <td>9.035035</td>
+      <td>14.480129</td>
+      <td>4.6231337</td>
+      <td>6.4538627</td>
+      <td>LogParabola</td>
+      <td>LogParabola</td>
+      <td>2.3524816e-11</td>
+      <td>288.00613</td>
+      <td>-0.9672107</td>
+    </tr>
+    <tr>
+      <td>RCW 38</td>
+      <td>189.</td>
+      <td>3FGL J0859.3-4732</td>
+      <td>4FGL J0859.2-4729</td>
+      <td>5.917928</td>
+      <td>13.8408985</td>
+      <td>2.3945305</td>
+      <td>3.909002</td>
+      <td>PowerLaw</td>
+      <td>LogParabola</td>
+      <td>1.9658546e-11</td>
+      <td>267.9374</td>
+      <td>-1.0268956</td>
+    </tr>
+    <tr>
+      <td><a href="slides/FGL_slides (dragged) 8.pdf">3FGL J1016.5-6034</a></td>
+      <td>2.</td>
+      <td>3FGL J1016.5-6034</td>
+      <td>4FGL J1015.5-6030</td>
+      <td>11.341704</td>
+      <td>11.72494</td>
+      <td>5.82827</td>
+      <td>2.4684863</td>
+      <td>LogParabola</td>
+      <td>PowerLaw</td>
+      <td>1.8504698e-11</td>
+      <td>284.8662</td>
+      <td>-3.2181122</td>
+    </tr>
+    <tr>
+      <td><a href="slides/FGL_slides (dragged) 14.pdf">GBS13-3</a></td>
+      <td>2.</td>
+      <td>3FGL J1754.0-2930</td>
+      <td>4FGL J1754.6-2933</td>
+      <td>15.030973</td>
+      <td>10.205634</td>
+      <td>6.6750445</td>
+      <td>5.4923315</td>
+      <td>LogParabola</td>
+      <td>LogParabola</td>
+      <td>1.1110873e-11</td>
+      <td>0.48208407</td>
+      <td>-2.0071337</td>
+    </tr>
+    <tr>
+      <td><a href="slides/FGL_slides (dragged) 10.pdf">HESS J1800-240B </a></td>
+      <td>79.</td>
+      <td>3FGL J1800.8-2402</td>
+      <td>4FGL J1800.9-2407</td>
+      <td>17.480143</td>
+      <td>9.364669</td>
+      <td>5.431241</td>
+      <td>3.286776</td>
+      <td>LogParabola</td>
+      <td>LogParabola</td>
+      <td>3.0728902e-11</td>
+      <td>5.8768964</td>
+      <td>-0.51136285</td>
+    </tr>
+    <tr>
+      <td>&nbsp;</td>
+      <td>&nbsp;</td>
+      <td>&nbsp;</td>
+      <td>4FGL J1759.7-2354</td>
+      <td>&nbsp;</td>
+      <td>8.334932</td>
+      <td>&nbsp;</td>
+      <td>5.116669</td>
+      <td>&nbsp;</td>
+      <td>LogParabola</td>
+      <td>3.129453e-11</td>
+      <td>5.9454074</td>
+      <td>-0.16794126</td>
+    </tr>
+    <tr>
+      <td>&nbsp;</td>
+      <td>&nbsp;</td>
+      <td>&nbsp;</td>
+      <td>4FGL J1800.2-2403</td>
+      <td>&nbsp;</td>
+      <td>4.2316637</td>
+      <td>&nbsp;</td>
+      <td>0.70646095</td>
+      <td>&nbsp;</td>
+      <td>PowerLaw</td>
+      <td>1.35876805e-11</td>
+      <td>5.85668</td>
+      <td>-0.3397608</td>
+    </tr>
+    <tr>
+      <td>&nbsp;</td>
+      <td>&nbsp;</td>
+      <td>&nbsp;</td>
+      <td>4FGL J1801.8-2358</td>
+      <td>&nbsp;</td>
+      <td>10.059971</td>
+      <td>&nbsp;</td>
+      <td>1.1774077</td>
+      <td>&nbsp;</td>
+      <td>PowerLaw</td>
+      <td>3.5672968e-11</td>
+      <td>6.1067977</td>
+      <td>-0.610649</td>
+    </tr>
+    <tr>
+      <td><a href="slides/FGL_slides (dragged) 12.pdf">RCW106</a></td>
+      <td>59.</td>
+      <td>3FGL 1620.0-5101</td>
+      <td>4FGL J1619.4-5106</td>
+      <td>8.1887045</td>
+      <td>7.3889356</td>
+      <td>3.0495353</td>
+      <td>2.1348917</td>
+      <td>PowerLaw</td>
+      <td>PowerLaw</td>
+      <td>2.5273278e-11</td>
+      <td>332.5897</td>
+      <td>-0.61530745</td>
+    </tr>
+    <tr>
+      <td>GBSGTO4/AX J1740.1-2847</td>
+      <td>3.</td>
+      <td>3FGL J1740.5-2843</td>
+      <td>4FGL J1740.4-2850</td>
+      <td>15.128961</td>
+      <td>6.879431</td>
+      <td>4.8024235</td>
+      <td>3.4549196</td>
+      <td>LogParabola</td>
+      <td>LogParabola</td>
+      <td>9.233849e-12</td>
+      <td>359.48547</td>
+      <td>1.0026399</td>
+    </tr>
+  </table>
+  <h2>Summary and Conclusions</h2>
+  <p>We have found a promising young pulsar candidate with a luminous PWN (3FGL J1016.5-6034). A short CXO imaging
+    observation played a crucial role in the identification of this source. We also found two more pulsar candidates one
+    of which may be in a low mass binary. In addition, we found some CV and AGN candidates but CVs (except when in nova
+    outburst) are not known to be GeV sources. </p>
+  <h2>Acknowledgements</h2>
+  <p>We acknowledge the support for this work from NASA award 80NSSC17K0760 and Chandra award AR3-14017X. </p>
+</body>
+
+</html>
