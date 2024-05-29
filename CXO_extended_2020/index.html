@@ -1,0 +1,131 @@
+<!doctype html>
+<html lang="en">
+
+<head>
+
+    <meta charset='UTF-8'>
+    <!-- <meta name="viewport" content="width=device-width, initial-scale=1, maximum-scale=1.0"> -->
+    <meta name="viewport" content="width=device-width, initial-scale=1" />
+    <title>Automated search for extended sources in archival Chandra X-ray Observatory data</title>
+    <meta name="description" content="test" />
+    <meta name="keywords" content="astrophysics, extended objects" />
+    <meta name="author" content="test" />
+    <!-- <link rel="shortcut icon" href="../favicon.ico"> -->
+
+    <link href="https://cdn.jsdelivr.net/npm/bootstrap@5.0.0-beta1/dist/css/bootstrap.min.css" rel="stylesheet"
+        integrity="sha384-giJF6kkoqNQ00vy+HMDP7azOuL0xtbfIcaT9wjKHr8RbDVddVHyTfAAsrekwKmP1" crossorigin="anonymous" />
+
+    <link rel='stylesheet' type='text/css' href='css/mystyle3.css'>
+    <link rel='stylesheet' type='text/css' href='css/et-book.css'>
+
+    <script src="https://ajax.googleapis.com/ajax/libs/jquery/3.5.1/jquery.min.js"></script>
+
+    <!-- <script src="js/jquery-3.5.1.min.js"></script> -->
+
+</head>
+
+<body class="py-4">
+
+    <div class="container">
+        <header class="clearfix">
+            <h1>Automated search for extended sources in archival Chandra X-ray Observatory data</h1>
+        </header>
+        <div class="main">
+        
+         <img src="cxo_coverage_plane.jpg" alt="" />
+            <p>
+                Figure: Chandra X-ray Observatory coverage of the inner Galactic plane (credit: ESASky).
+            </p>
+
+
+            <p class='ital'>Support for this project is provided by Chandra X-ray Observatory award AR8-19008X.</p>
+            <h2>Project Summary</h2>
+
+            <p>
+                An systematic automated search for extended sources is  carried out in  archival imaging observations
+                performed
+                with
+                 Advanced CCD
+                Imaging Spectrometer (ACIS) onboard Chandra X-ray Observatory (CXO). We selected all imaging ACIS observations within 10 degrees from the Galactic plane with exposure times  of 10 ks or longer. 
+                In total we analyzed about 2,000 CXO observations during this project. We use DBSCAN density-based spatial clustering algorithm (Ester et al. 1996) implemented in <a href="https://scikit-learn.org/stable/modules/generated/sklearn.cluster.DBSCAN.html">Python's scikit-learn library</a>.  
+               We describe the approach,  source detection  and characterization, and display our preliminary findings in the  interactive table.
+            </p>
+
+            <h2>Motivation</h2>
+
+            <ul>
+                <li>CXO ACIS images have very low noise level enabling detection of faint extended sources;</li>
+                <li>Galactic extended sources can be of rare/interesting types (e.g., pulsar wind nebulae, supernova
+                    remnants);</li>
+                <li>Extended source detection in X-rays can aid identification of sources at higher energies (GeV/TeV);
+                </li>
+                <li>Human eyes are very good at detecting patterns but often see features that don't exist in the noise; </li>
+                <li>There are thousands of ACIS images in CXO archive - too many for a human to look at; </li>
+                <li> Developed here approach can be useful for future X-ray astronomy missions (e.g., Athena). </li>
+            </ul>
+
+            <h2>Data selection and treatment</h2>
+
+            <ul>
+                <li>The CXO observation must be an imaging observation within 10 degrees from the Galactic plane  with ACIS-I or ACIS-S and exposure time of 10 ks or longer;</li>
+                <li>The data are filtered to only keep photons with energies in 0.5–8 keV;</li>
+                <li>Each CCD chip is analyzed separately.</li>
+            </ul>
+
+            <h2>Event-based algorithm for finding extended objects (steps performed per each ACIS chip):</h2>
+            <ul>
+                <li>Standardize the data so that the coordinates
+                    for each dimension have zero mean and unit standard deviation;</li>
+                <li> Perform multiple DBSCAN passes with varying min_samples parameter (number of points in the neighborhood of a "core point") and then use the 
+                    <a href="https://pypi.org/project/kneed/">   Python implementation </a> of <a href="https://raghavan.usc.edu//papers/kneedle-simplex11.pdf"> Kneedle algorithm</a> in order to find the optimal min_samples value;</li>
+                <li>Construct lasso regions for each cluster by using <a href="https://pypi.org/project/alphashape/"> alpha-shape algorithm</a>;</li> 
+                <li> Select and remove point sources (after accounting for varying PSF size with off-axis distance) using principal component analysis (PCA) and Hotelling's T-squared statistic; </li>
+                <li> The background is estimated as an average surface density of photons on the chip outside the extended source regions;</li>
+                <li> For each extended source candiate calculate the area, the total and net number of photons,
+                    signal-to-noise-ratio (S/N),
+                    and center of mass (to be used as source coordinates); </li>
+                <li> Filter the remaining extended sources selecting those with S/N>5. </li>
+            </ul>
+
+            <h2>Future developments</h2>
+
+            <ul>
+             <!---   <li> Use Friends-of-Friends (FoF) algorithm to de-blend close by sources; </li> --->
+               <li> While DBSCAN-based method is robust and provides good sensitivity to extended sources it often does not capture the full extent of the sources; density-based clustering may provide better characterization  of extended source properties (see our <a href="https://home.gwu.edu/~kargaltsev/cxo_extended/extended_new.html">   earlier work </a>) once initial detections are done with DBSCAN. 
+                  </li>
+                <li> Sources sharing common boundary across the chip gap to be merged into a single source; </li>
+                <li>
+                    If the spectra of extended sources are different from that of the background, we can use the
+                    energies of
+                    events as
+                    an additional dimension for clustering analysis;
+                </li>
+                <li> Improve background estimation by finding the location with minimal surface brightness on the chip and using it for the background; </li>
+               <!---   <li>Improve background estimations for heterogeneous non-Poissonian background using MC;</li>--->
+                <li>Explore the supervised machine-learning (neural networks) to discern empty from non-empty images and
+                    detect
+                    sources.</li>
+            </ul>
+
+           
+            <h2>297 Chandra ACIS observations where extended sources are detected. </h2>
+
+            <p class='ital'>To see the images and extended source regions click on the table row. To see the extended sources properties click on the source region.</p>
+
+
+
+        </div>
+        <div class="row gx-1 zzz justify-content-center">
+
+        </div>
+    </div>
+
+
+
+    <script src="js/table4.js?id=2"></script>
+    <script src="https://cdn.jsdelivr.net/npm/bootstrap@5.0.0-beta1/dist/js/bootstrap.bundle.min.js"
+        integrity="sha384-ygbV9kiqUc6oa4msXn9868pTtWMgiQaeYH7/t7LECLbyPA2x65Kgf80OJFdroafW"
+        crossorigin="anonymous"></script>
+</body>
+
+</html>
