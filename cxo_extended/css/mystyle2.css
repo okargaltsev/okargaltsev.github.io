@@ -1,0 +1,87 @@
+.container {
+  position: relative;
+}
+
+.topleft {
+  position: absolute;
+  top: 8px;
+  right: 0px;
+  font-size: 18px;
+  background: white;
+}
+
+polygon {
+  fill:transparent;
+  stroke:lime;
+  stroke-width:1;
+} 
+
+polygon:hover {
+  fill:lime;
+  fill-opacity:0.2;
+  cursor: pointer;
+}
+
+.ital {
+	font-style: italic;
+}
+
+table {
+  font-family: "Trebuchet MS", Arial, Helvetica, sans-serif;
+
+  /* font-size: 2vw */
+  font-size: 9pt;
+
+  width: 90%;
+
+  margin-left: auto;
+  margin-right: auto;
+
+  text-align: center;
+
+  /* float: left; */
+
+  /* border-collapse: collapse; 
+    width: 60%; */
+}
+
+ table td, 
+table th {
+  border: 1pt;
+
+  padding: 1px;
+   
+}
+
+table tr.odd {
+  background-color: #f2f2f2;
+}
+
+/* table tr:nth-child(even) {
+  background-color: #f2f2f2;
+} */
+
+table tr.click:hover {
+  background-color: #ddd;
+}
+
+table th, button {
+  padding-top: 12px;
+  padding-bottom: 12px;
+  text-align: center;
+  background-color: #4CAF50;
+  color: white;
+}
+
+img {
+  width: 75%;
+
+  /* height: 600px; */
+}
+
+/* #a1, #a2 {
+ border: 0; 
+ 
+  background-color: red;
+
+} */

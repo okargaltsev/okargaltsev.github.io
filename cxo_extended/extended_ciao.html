@@ -1,0 +1,136 @@
+<!doctype html>
+<html lang="en">
+
+<head>
+
+    <meta charset='UTF-8'>
+    <meta name="viewport" content="width=device-width, initial-scale=1, maximum-scale=1.0">
+    <title>Automated search for extended sources in archival Chandra X-ray Observatory data</title>
+    <meta name="description" content="test" />
+    <meta name="keywords" content="astrophysics, extended objects" />
+    <meta name="author" content="test" />
+    <!-- <link rel="shortcut icon" href="../favicon.ico"> -->
+
+    <link rel='stylesheet' type='text/css' href='css/mystyle2.css'>
+
+    
+
+    <script src="https://ajax.googleapis.com/ajax/libs/jquery/3.4.1/jquery.min.js"></script>
+
+    <!-- <script src="js/jquery-3.4.1.min.js"></script> -->
+
+</head>
+
+<body>
+
+    <div class="container">
+        <header class="clearfix">
+            <h1>Automated search for extended sources in archival Chandra X-ray Observatory data</h1>
+        </header>
+        <div class="main">
+
+            <p class='ital'>Support for this project is provided by Chandra X-ray Observatory award AR8-19008X.</p>
+            <h2>Project Summary</h2>
+
+            <p>
+                An automated search for extended sources is being carried out in the archival imaging observations
+                performed
+                with
+                the Chandra X-ray Observatory Advanced CCD
+                Imaging Spectrometer (ACIS). We describe the approach, the source detection
+                and characterization, and the results of performance testing, and preliminary findings from the searches
+                preformed for
+                the ACIS observations of the Galactic plane fields.
+            </p>
+
+            <h2>Motivation</h2>
+
+            <ul>
+                <li>CXO ACIS has very low noise level, faint extended sources can be discovered;</li>
+                <li>Extended objects can be of rare and interesting types (e.g., pulsar wind nebulae, supernova
+                    remnants);</li>
+                <li>Extended source detection in X-rays can aid identification of sources at higher energies (GeV/TeV);
+                </li>
+                <li>Human eyes are amazing but often see features that don't exist in the noise; </li>
+                <li>There are many thousands of ACIS images - too many for a human to look at. </li>
+            </ul>
+
+            <h2>Data treatment</h2>
+
+            <ul>
+                <li>Must be an ACIS observation with exposure time >4ks;</li>
+                <li>The data are filtered to keep photons with energies in 0.5–8 keV;</li>
+                <li>Each CCD chip was analyzed separately, but then the regions and chips can be merged back;</li>
+                <li>Images were pre-binned by a factor of 2 and 4 (currently in the database below) before running the
+                    extended
+                    object detection.</li>
+            </ul>
+
+            <h2>Density-based algorithm for finding extended objects (steps performed per ACIS chip):</h2>
+            <ul>
+                <li> Convolve the image with the fixed-size gaussian kernel (r=6'');</li>
+                <li> Fined the minimum of the surfacce brightness in the convolved image while taking care of the edge
+                    effects;
+                </li>
+                <li> Sample background from the original (not smoothed file) using circular region centered at the
+                    location of
+                    the minimum surface brightness, check the
+                    the circular region does nto contain point sources; </li>
+                <li> Create background image (with the size of original image) from the sampled background; </li>
+                <li> Smooth the background image with the same gaussian kernel; </li>
+                <li> Characterize the level of fluctuations in the background image by measuring MinMax values and
+                    standard
+                    deviation; </li>
+                <li> Produce the net image by subtracting the smoothed background image from the smoothed original
+                    image; </li>
+                <li> Thresholding: Find ``connected'' regions (surrounded by closed boundary of arbitrary shape without
+                    intersections) above the threshold set by multiplying
+                    the background standard deviation by 3 (or taking the maximum background value if it exceeds the
+                    3*STD
+                    value.); </li>
+                <li> Produce a mask image capturing these regions and the corresponding DS9 region files;
+                </li>
+                <li> For each extended source candiate calculate the area, the total and net number of photons,
+                    signal-to-noise-ratio (S/N),
+                    and center of mass (to be used as source coordinates); </li>
+                <li> Filter sources on their size (to remove point sources whose sizes depend on off-axis distance) and
+                    S/N
+                    (selecting those with S/N>5); </li>
+                <li> Generate an output table and export it into an online database (beta version is available below).
+                </li>
+            </ul>
+
+            <h2>Future developments</h2>
+
+            <ul>
+                <li> Apply Friends-of-Friends (FoF) algorithm to de-blend close by sources; </li>
+                <li> Sources sharing common boundary across the chip gap to be merged into a single source; </li>
+                <li>
+                    If the spectra of extended sources are different from that of the background, we can use the
+                    energies of
+                    events as
+                    an additional dimension for clustering analysis;
+                </li>
+                <li>Improve background estimations for heterogeneous non-Poissonian background using MC;</li>
+                <li>Explore the supervised machine-learning (neural networks) to discern empty from non-empty images and
+                    detect
+                    sources.</li>
+            </ul>
+
+            <img src="CXO_coverage.png" alt="" />
+            <p>
+                Fig 1. Chandra X-ray Observatory coverage of the inner Galactic plane (credit: ESASky).
+            </p>
+
+            <h2>Beta version of the database presenting the results for Chandra ACIS observations pointed between -3 and
+                -8
+                degrees in Galactic latitude. </h2>
+
+            <p class='ital'>For images click on the table row.</p>
+
+            <script src="js/table3_ciao.js?id=1"></script>
+        </div>
+    </div>
+</body>
+
+</html>
